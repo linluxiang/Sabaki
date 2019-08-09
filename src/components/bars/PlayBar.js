@@ -1,7 +1,7 @@
-const {shell, clipboard} = require('electron')
-const {h, Component} = require('preact')
+const { shell, clipboard } = require('electron')
+const { h, Component } = require('preact')
 const classNames = require('classnames')
-const {remote} = require('electron')
+const { remote } = require('electron')
 
 const TextSpinner = require('../TextSpinner')
 
@@ -18,16 +18,16 @@ class PlayBar extends Component {
         this.handleCurrentPlayerClick = () => this.props.onCurrentPlayerClick
 
         this.handleMenuClick = () => {
-            let {left, top} = this.menuButtonElement.getBoundingClientRect()
+            let { left, top } = this.menuButtonElement.getBoundingClientRect()
             helper.popupMenu([
                 {
-                    label: t(p => `About ${p.appName}…`, {appName: sabaki.appName}),
+                    label: t(p => `About ${p.appName}…`, { appName: sabaki.appName }),
                     click: () => shell.openExternal('http://sabaki.yichuanshen.de')
                 },
-                {type: 'separator'},
+                { type: 'separator' },
                 {
                     label: t('New File'),
-                    click: () => sabaki.newFile({playSound: true, showInfo: true})
+                    click: () => sabaki.newFile({ playSound: true, showInfo: true })
                 },
                 {
                     label: t('Open File…'),
@@ -42,14 +42,14 @@ class PlayBar extends Component {
                     click: () => {
                         let content = clipboard.readText()
                         if (content == null) return
-                        sabaki.loadContent(content, 'sgf', {ignoreEncoding: true})
+                        sabaki.loadContent(content, 'sgf', { ignoreEncoding: true })
                     }
                 },
                 {
                     label: t('Copy SGF to Clipboard'),
                     click: () => clipboard.writeText(sabaki.getSGF())
                 },
-                {type: 'separator'},
+                { type: 'separator' },
                 {
                     label: t('Show &Coordinates'),
                     checked: setting.get('view.show_coordinates'),
@@ -74,19 +74,19 @@ class PlayBar extends Component {
                     label: t('&Manage Games…'),
                     click: () => sabaki.openDrawer('gamechooser')
                 },
-                {type: 'separator'},
+                { type: 'separator' },
                 {
                     label: t('&Pass'),
                     click: () => {
                         let autoGenmove = setting.get('gtp.auto_genmove')
-                        sabaki.makeMove([-1, -1], {sendToEngine: autoGenmove})
+                        sabaki.makeMove([-1, -1], { sendToEngine: autoGenmove })
                     }
                 },
                 {
                     label: t('&Resign'),
                     click: () => sabaki.makeResign()
                 },
-                {type: 'separator'},
+                { type: 'separator' },
                 {
                     label: t('Es&timate'),
                     click: () => sabaki.setMode('estimator')
@@ -103,7 +103,7 @@ class PlayBar extends Component {
                     label: t('&Find'),
                     click: () => sabaki.setMode('find')
                 },
-                {type: 'separator'},
+                { type: 'separator' },
                 {
                     label: t('&Info'),
                     click: () => sabaki.openDrawer('info')
@@ -128,7 +128,7 @@ class PlayBar extends Component {
 
         onCurrentPlayerClick = helper.noop
     }) {
-        let captureStyle = index => ({opacity: playerCaptures[index] === 0 ? 0 : .7})
+        let captureStyle = index => ({ opacity: playerCaptures[index] === 0 ? 0 : .7 })
         let isEngine = Array(attachedEngines.length).fill(false)
 
         attachedEngines.forEach((engine, i) => {
@@ -147,13 +147,13 @@ class PlayBar extends Component {
                 })
             },
 
-            h('div', {class: 'hotspot', title: t('Hotspot')}),
+            h('div', { class: 'hotspot', title: t('Hotspot') }),
 
-            h('span', {class: 'playercontent player_1'},
-                h('span', {class: 'captures', style: captureStyle(0)}, playerCaptures[0]), ' ',
+            h('span', { class: 'playercontent player_1' },
+                h('span', { class: 'captures', style: captureStyle(0) }, playerCaptures[0]), ' ',
 
                 playerRanks[0] && h('span',
-                    {class: 'rank'},
+                    { class: 'rank' },
                     t(p => p.playerRank, {
                         playerRank: playerRanks[0]
                     })
@@ -161,7 +161,7 @@ class PlayBar extends Component {
 
                 h('span',
                     {
-                        class: classNames('name', {engine: isEngine[0]}),
+                        class: classNames('name', { engine: isEngine[0] }),
                         title: isEngine[0] && t('Engine')
                     },
                     isEngine[0] && playerBusy[0] && h(TextSpinner),
@@ -181,19 +181,19 @@ class PlayBar extends Component {
                     height: 21,
                     alt: t(p =>
                         `${
-                            p.player < 0 ? 'White'
+                        p.player < 0 ? 'White'
                             : p.player > 0 ? 'Black'
-                            : p.player
+                                : p.player
                         } to play`,
-                        {player: currentPlayer}
+                        { player: currentPlayer }
                     )
                 })
             ),
 
-            h('span', {class: 'playercontent player_-1'},
+            h('span', { class: 'playercontent player_-1' },
                 h('span',
                     {
-                        class: classNames('name', {engine: isEngine[1]}),
+                        class: classNames('name', { engine: isEngine[1] }),
                         title: isEngine[1] && t('Engine')
                     },
                     playerNames[1] || t('White'),
@@ -202,23 +202,23 @@ class PlayBar extends Component {
                 ), ' ',
 
                 playerRanks[1] && h('span',
-                    {class: 'rank'},
+                    { class: 'rank' },
                     t(p => p.playerRank, {
                         playerRank: playerRanks[1]
                     })
                 ), ' ',
 
-                h('span', {class: 'captures', style: captureStyle(1)}, playerCaptures[1])
+                h('span', { class: 'captures', style: captureStyle(1) }, playerCaptures[1])
             ),
 
-            h('a',
-                {
-                    ref: el => this.menuButtonElement = el,
-                    class: 'menu',
-                    onClick: this.handleMenuClick
-                },
-                h('img', {src: './node_modules/octicons/build/svg/three-bars.svg', height: 22})
-            )
+            // h('a',
+            //     {
+            //         ref: el => this.menuButtonElement = el,
+            //         class: 'menu',
+            //         onClick: this.handleMenuClick
+            //     },
+            //     h('img', {src: './node_modules/octicons/build/svg/three-bars.svg', height: 22})
+            // )
         )
     }
 }

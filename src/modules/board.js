@@ -124,7 +124,7 @@ class Board {
         visited[vertex] = true
 
         return neighbors.filter(n => this.get(n) === sign)
-        .some(n => this.hasLiberties(n, visited))
+            .some(n => this.hasLiberties(n, visited))
     }
 
     getLiberties(vertex) {
@@ -151,7 +151,7 @@ class Board {
         return area.filter(v => this.get(v) === this.get(vertex))
     }
 
-    getScore(areaMap, {komi = 0, handicap = 0} = {}) {
+    getScore(areaMap, { komi = 0, handicap = 0 } = {}) {
         let score = {
             area: [0, 0],
             territory: [0, 0],
@@ -313,7 +313,7 @@ class Board {
                 if (!this.markers[y][x] || !(this.markers[y][x].type in data)) {
                     if (s !== 0) result[i] = data.plain[s + 1]
                 } else {
-                    let {type, label} = this.markers[y][x]
+                    let { type, label } = this.markers[y][x]
 
                     if (type !== 'label' || s !== 0) {
                         result[i] = data[type][s + 1]
@@ -328,7 +328,7 @@ class Board {
 
         // Add lines & arrows
 
-        for (let {v1, v2, type} of this.lines) {
+        for (let { v1, v2, type } of this.lines) {
             result += `{${type === 'arrow' ? 'AR' : 'LN'} ${this.vertex2coord(v1)} ${this.vertex2coord(v2)}}${lb}`
         }
 
@@ -346,6 +346,20 @@ class Board {
             this.markers,
             this.lines
         ]))
+    }
+
+    getRandomEmptyVertx() {
+        var emptyVertexes = [];
+        for (var y = 0; y < this.arrangement.length; y++) {
+            var xrow = this.arrangement[y];
+            for (var x = 0; x < xrow.length; x++) {
+                if (this.arrangement[y][x] == 0) {
+                    emptyVertexes.push([x, y]);
+                }
+            }
+        }
+
+        return emptyVertexes[Math.floor(Math.random() * emptyVertexes.length)];
     }
 }
 

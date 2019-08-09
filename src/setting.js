@@ -99,15 +99,15 @@ let defaults = {
     'view.fuzzy_stone_placement': true,
     'view.properties_height': 50,
     'view.properties_minheight': 20,
-    'view.show_menubar': true,
+    'view.show_menubar': false,
     'view.show_leftsidebar': false,
-    'view.show_comments': true,
-    'view.show_coordinates': false,
-    'view.show_graph': true,
+    'view.show_comments': false,
+    'view.show_coordinates': true,
+    'view.show_graph': false,
     'view.show_move_colorization': true,
     'view.show_move_numbers': false,
-    'view.show_next_moves': true,
-    'view.show_siblings': true,
+    'view.show_next_moves': false,
+    'view.show_siblings': false,
     'view.leftsidebar_width': 250,
     'view.leftsidebar_minwidth': 100,
     'view.sidebar_width': 280,
@@ -125,7 +125,7 @@ let defaults = {
 exports.events = new EventEmitter()
 exports.events.setMaxListeners(100)
 
-exports.load = function() {
+exports.load = function () {
     if (localStorage.sabaki_settings != null) {
         settings = JSON.parse(localStorage.sabaki_settings)
     } else {
@@ -164,11 +164,11 @@ exports.load = function() {
     return exports.save()
 }
 
-exports.loadThemes = function() {
+exports.loadThemes = function () {
     return {}
 }
 
-exports.save = function() {
+exports.save = function () {
     let keys = Object.keys(settings).sort()
 
     localStorage.sabaki_settings = JSON.stringify(
@@ -179,20 +179,20 @@ exports.save = function() {
     return exports
 }
 
-exports.get = function(key) {
+exports.get = function (key) {
     if (key in settings) return settings[key]
     if (key in defaults) return defaults[key]
     return null
 }
 
-exports.set = function(key, value) {
+exports.set = function (key, value) {
     settings[key] = value
     exports.save()
-    exports.events.emit('change', {key, value})
+    exports.events.emit('change', { key, value })
     return exports
 }
 
-exports.getThemes = function() {
+exports.getThemes = function () {
     if (themesDict == null) exports.loadThemes()
     return themesDict
 }
